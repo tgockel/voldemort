@@ -39,7 +39,6 @@ import voldemort.server.VoldemortConfig;
 import voldemort.server.VoldemortServer;
 import voldemort.store.socket.SocketStoreFactory;
 import voldemort.store.socket.clientrequest.ClientRequestExecutorPool;
-import voldemort.utils.RebalanceUtils;
 import voldemort.versioning.VectorClock;
 import voldemort.versioning.Versioned;
 
@@ -104,7 +103,7 @@ public class RebootstrappingStoreTest {
         assert servers != null && servers.size() > 1;
 
         VoldemortConfig config = servers.get(0).getVoldemortConfig();
-        AdminClient adminClient = RebalanceUtils.createTempAdminClient(config, cluster, 4);
+        AdminClient adminClient = AdminClient.createTempAdminClient(config, cluster, 4);
         HashMap<Integer, List<Integer>> replicaToPartitionList = Maps.newHashMap();
         replicaToPartitionList.put(0, ImmutableList.of(0, 1));
         int req = adminClient.storeMntOps.migratePartitions(0,

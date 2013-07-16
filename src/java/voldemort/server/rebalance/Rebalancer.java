@@ -37,7 +37,6 @@ import voldemort.store.metadata.MetadataStore;
 import voldemort.store.metadata.MetadataStore.VoldemortState;
 import voldemort.store.readonly.ReadOnlyStorageConfiguration;
 import voldemort.store.readonly.ReadOnlyStorageEngine;
-import voldemort.utils.RebalanceUtils;
 import voldemort.versioning.VectorClock;
 import voldemort.versioning.Versioned;
 
@@ -422,7 +421,7 @@ public class Rebalancer implements Runnable {
         AdminClient adminClient = null;
         List<Integer> stealerNodeIdsPermitsAcquired = Lists.newArrayList();
         try {
-            adminClient = RebalanceUtils.createTempAdminClient(voldemortConfig,
+            adminClient = AdminClient.createTempAdminClient(voldemortConfig,
                                                                metadataStore.getCluster(),
                                                                1);
             int donorNodeId = metadataStore.getNodeId();

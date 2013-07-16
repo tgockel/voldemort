@@ -930,7 +930,7 @@ public class AdminServiceRequestHandler implements RequestHandler {
 
                 @Override
                 public void operate() {
-                    AdminClient adminClient = RebalanceUtils.createTempAdminClient(voldemortConfig,
+                    AdminClient adminClient = AdminClient.createTempAdminClient(voldemortConfig,
                                                                                    metadataStore.getCluster(),
                                                                                    voldemortConfig.getClientMaxConnectionsPerNode());
                     try {

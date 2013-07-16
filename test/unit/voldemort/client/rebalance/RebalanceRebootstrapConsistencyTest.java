@@ -38,7 +38,6 @@ import voldemort.store.metadata.MetadataStore;
 import voldemort.store.socket.SocketStoreFactory;
 import voldemort.store.socket.clientrequest.ClientRequestExecutorPool;
 import voldemort.store.system.SystemStoreConstants;
-import voldemort.utils.RebalanceUtils;
 import voldemort.utils.SystemTime;
 import voldemort.versioning.VectorClock;
 import voldemort.versioning.Versioned;
@@ -208,7 +207,7 @@ public class RebalanceRebootstrapConsistencyTest {
         assert servers != null && servers.size() > 1;
 
         VoldemortConfig config = servers.get(0).getVoldemortConfig();
-        adminClient = RebalanceUtils.createTempAdminClient(config, cluster, 4);
+        adminClient = AdminClient.createTempAdminClient(config, cluster, 4);
         HashMap<Integer, List<Integer>> replicaToPartitionList = Maps.newHashMap();
         replicaToPartitionList.put(0, ImmutableList.of(0, 1));
         int req = adminClient.storeMntOps.migratePartitions(0,
