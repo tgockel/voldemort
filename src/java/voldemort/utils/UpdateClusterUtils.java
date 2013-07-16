@@ -16,7 +16,6 @@
 
 package voldemort.utils;
 
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,12 +23,11 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
 import voldemort.cluster.Cluster;
 import voldemort.cluster.Node;
-import voldemort.xml.ClusterMapper;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * UpdateClusterUtils provides helper methods for manipulating nodes and
@@ -122,7 +120,7 @@ public class UpdateClusterUtils {
             if(!updatedNodeList.contains(currentNode))
                 newNodeList.add(currentNode);
         }
-    
+
         Collections.sort(newNodeList);
         return new Cluster(currentCluster.getName(),
                            newNodeList,
@@ -143,33 +141,30 @@ public class UpdateClusterUtils {
     public static Cluster createUpdatedCluster(Cluster currentCluster,
                                                int stealerNodeId,
                                                List<Integer> donatedPartitions) {
-    
-        // Clone the cluster
-        ClusterMapper mapper = new ClusterMapper();
-        Cluster updatedCluster = mapper.readCluster(new StringReader(mapper.writeCluster(currentCluster)));
-    
+        Cluster updatedCluster = Cluster.cloneCluster(currentCluster);
+
         // Go over every donated partition one by one
         for(int donatedPartition: donatedPartitions) {
-    
+
             // Gets the donor Node that owns this donated partition
             Node donorNode = updatedCluster.getNodeForPartitionId(donatedPartition);
             Node stealerNode = updatedCluster.getNodeById(stealerNodeId);
-    
+
             if(donorNode == stealerNode) {
                 // Moving to the same location = No-op
                 continue;
             }
-    
+
             // Update the list of partitions for this node
             donorNode = removePartitionFromNode(donorNode, donatedPartition);
             stealerNode = addPartitionToNode(stealerNode, donatedPartition);
-    
+
             // Sort the nodes
             updatedCluster = updateCluster(updatedCluster,
                                            Lists.newArrayList(donorNode, stealerNode));
-    
+
         }
-    
+
         return updatedCluster;
     }
 }
