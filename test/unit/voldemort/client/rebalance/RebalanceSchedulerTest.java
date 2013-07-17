@@ -44,6 +44,7 @@ public class RebalanceSchedulerTest {
     private final RebalanceBatchPlanProgressBar progressBar = new RebalanceBatchPlanProgressBar(0,
                                                                                                 1,
                                                                                                 1);
+
     @Test
     public void test() {
 
@@ -68,7 +69,6 @@ public class RebalanceSchedulerTest {
         StealerBasedRebalanceTask sbTask = new StealerBasedRebalanceTask(0,
                                                                          0,
                                                                          partitionsInfo,
-                                                                         3,
                                                                          donorPermit,
                                                                          adminClient,
                                                                          progressBar,
@@ -82,15 +82,18 @@ public class RebalanceSchedulerTest {
         mockedScheduler.initializeLatch(sbTaskList.size());
         mockedScheduler.populateTasksByStealer(sbTaskList);
 
-        // In the beginning both stealer and donor are idle so scheduler should return the scheduled 
+        // In the beginning both stealer and donor are idle so scheduler should
+        // return the scheduled
         // task
         StealerBasedRebalanceTask scheduledTask = mockedScheduler.scheduleNextTask(false);
         org.junit.Assert.assertNotNull(sbTask);
         org.junit.Assert.assertEquals(sbTask, scheduledTask);
         mockedScheduler.removeNodesFromWorkerList(Arrays.asList(stealerId, donorId));
 
-        // Now lets remove the donor from the worker list so that the donor is idle and add the 
-        // stealer to the worker list. The scheduler should return null as it won't be able to 
+        // Now lets remove the donor from the worker list so that the donor is
+        // idle and add the
+        // stealer to the worker list. The scheduler should return null as it
+        // won't be able to
         // schedule the task.
         mockedScheduler.addNodesToWorkerList(Arrays.asList(stealerId));
         mockedScheduler.removeNodesFromWorkerList(Arrays.asList(donorId));
@@ -112,6 +115,5 @@ public class RebalanceSchedulerTest {
         org.junit.Assert.assertNotNull(sbTask);
         org.junit.Assert.assertEquals(sbTask, nextscheduledTask);
 
-     
     }
 }
