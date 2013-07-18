@@ -1,12 +1,12 @@
 /*
  * Copyright 2013 LinkedIn, Inc
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -33,7 +33,7 @@ import com.google.common.collect.Lists;
 /**
  * Immutable class that executes a {@link RebalancePartitionsInfo} instance on
  * the rebalance client side.
- *
+ * 
  * This is run from the stealer nodes perspective
  */
 public class StealerBasedRebalanceTask extends RebalanceTask {
@@ -74,7 +74,7 @@ public class StealerBasedRebalanceTask extends RebalanceTask {
             taskLog("Started async rebalance task on stealer node " + stealerNodeId);
 
             return asyncOperationId;
-            
+
         } catch(AlreadyRebalancingException e) {
             String errorMessage = "Node "
                                   + stealerNodeId
@@ -96,18 +96,16 @@ public class StealerBasedRebalanceTask extends RebalanceTask {
             rebalanceAsyncId = startNodeRebalancing();
             taskStart(rebalanceAsyncId);
 
-            adminClient.rpcOps.waitForCompletion(stealerNodeId,
-                                                 rebalanceAsyncId);
+            adminClient.rpcOps.waitForCompletion(stealerNodeId, rebalanceAsyncId);
             taskDone(rebalanceAsyncId);
 
-        } catch (UnreachableStoreException e) {
+        } catch(UnreachableStoreException e) {
             exception = e;
-            logger.error("Stealer node "
-                                 + stealerNodeId
+            logger.error("Stealer node " + stealerNodeId
                                  + " is unreachable, please make sure it is up and running : "
                                  + e.getMessage(),
                          e);
-        } catch (Exception e) {
+        } catch(Exception e) {
             exception = e;
             logger.error("Rebalance failed : " + e.getMessage(), e);
         } finally {
@@ -120,6 +118,6 @@ public class StealerBasedRebalanceTask extends RebalanceTask {
     @Override
     public String toString() {
         return "Stealer based rebalance task on stealer node " + stealerNodeId
-                + " : " + getStealInfos();
+               + " from donor node " + donorNodeId + " : " + getStealInfos();
     }
 }
