@@ -163,9 +163,7 @@ public class RepairJobTest {
                                  new Versioned<byte[]>(ByteUtils.getBytes(entry.getValue(), "UTF-8")),
                                  null);
                 } catch(Exception e) {
-                    // Don't do anything with the exception. Exception are
-                    // expected here as we are
-                    // putting all keys on all nodes.
+                    e.printStackTrace();
                 }
             }
         }
