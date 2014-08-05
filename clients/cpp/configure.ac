@@ -28,8 +28,8 @@
 # 2. the libtool version in VERSION_INFO
 
 m4_define([sdk_pversion], 0)
-m4_define([sdk_sversion], 1)
-m4_define([sdk_iversion], 1)
+m4_define([sdk_sversion], 2)
+m4_define([sdk_iversion], 0)
 AC_INIT([voldemort], [sdk_pversion.sdk_sversion.sdk_iversion])
 AC_SUBST(SDK_MARKETNAME, ["Voldemort C++ Client"])
 AC_DEFINE(SDK_MARKETNAME, ["Voldemort C++ Client"], [Marketing name for SDK])
@@ -128,8 +128,9 @@ fi
 # acinclude.m4
 ACX_PTHREAD([], [])
 LIBS="$PTHREAD_LIBS $LIBS"
+CXXSTDFLAGS="-std=c++11"
 CFLAGS="$CFLAGS $PTHREAD_CFLAGS -D_REENTRANT"
-CXXFLAGS="$CXXFLAGS $PTHREAD_CFLAGS"
+CXXFLAGS="$CXXFLAGS $CXXSTDFLAGS $PTHREAD_CFLAGS"
 
 if test x$have_pthread = 'xfalse'; then
    AC_MSG_NOTICE([Could not find pthreads library])
